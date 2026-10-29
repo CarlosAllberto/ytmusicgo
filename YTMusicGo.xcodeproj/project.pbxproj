@@ -1,0 +1,331 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5ADD8EF90CD5AC527742B57C /* inject-ui.js in Resources */ = {isa = PBXBuildFile; fileRef = 6BDA120AB4D3EC8E540CFDBD /* inject-ui.js */; };
+		5EBC68B7BA062B0400521C0A /* inject-order.js in Resources */ = {isa = PBXBuildFile; fileRef = EAE327351B5BF7910E7C4B38 /* inject-order.js */; };
+		8CDBB58820BCF0DA99552182 /* AdBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D49A2B11280F2A33BAFC5CD /* AdBlock.swift */; };
+		A75A80EABA72516CE970C16F /* inject-ads.js in Resources */ = {isa = PBXBuildFile; fileRef = 9512242422E7A9124DADB6B4 /* inject-ads.js */; };
+		CDA9229965B6B879F8960370 /* rules.json in Resources */ = {isa = PBXBuildFile; fileRef = 351077E5589A9AFD262353C6 /* rules.json */; };
+		D49831AF510675F24D95B741 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FA5C7E29D3B0CE9963DC16 /* App.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		351077E5589A9AFD262353C6 /* rules.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules.json; sourceTree = "<group>"; };
+		4D49A2B11280F2A33BAFC5CD /* AdBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdBlock.swift; sourceTree = "<group>"; };
+		6BDA120AB4D3EC8E540CFDBD /* inject-ui.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "inject-ui.js"; sourceTree = "<group>"; };
+		74FA5C7E29D3B0CE9963DC16 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
+		9512242422E7A9124DADB6B4 /* inject-ads.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "inject-ads.js"; sourceTree = "<group>"; };
+		9C31C17E18DACDC211C1ACBD /* YTMusicGo.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = YTMusicGo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E96D04EA6EEC290DC1B2B6D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		EAE327351B5BF7910E7C4B38 /* inject-order.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "inject-order.js"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		7C59791A564B3C8C627108E8 /* YTMusicGo */ = {
+			isa = PBXGroup;
+			children = (
+				4D49A2B11280F2A33BAFC5CD /* AdBlock.swift */,
+				74FA5C7E29D3B0CE9963DC16 /* App.swift */,
+				E96D04EA6EEC290DC1B2B6D0 /* Info.plist */,
+				C02F6DECC78B0DC82068AAE2 /* Resources */,
+			);
+			path = YTMusicGo;
+			sourceTree = "<group>";
+		};
+		8C126C979CD3AF6279120148 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9C31C17E18DACDC211C1ACBD /* YTMusicGo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		99733204F3D7D8FF42242ABF = {
+			isa = PBXGroup;
+			children = (
+				7C59791A564B3C8C627108E8 /* YTMusicGo */,
+				8C126C979CD3AF6279120148 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C02F6DECC78B0DC82068AAE2 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				9512242422E7A9124DADB6B4 /* inject-ads.js */,
+				EAE327351B5BF7910E7C4B38 /* inject-order.js */,
+				6BDA120AB4D3EC8E540CFDBD /* inject-ui.js */,
+				351077E5589A9AFD262353C6 /* rules.json */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3F8901C0F95059137F35822D /* YTMusicGo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ACA49FF2FB0CCB2270C6211C /* Build configuration list for PBXNativeTarget "YTMusicGo" */;
+			buildPhases = (
+				2CB0EE9211B55A0E6AF3DD0A /* Sources */,
+				CC20924DFBB6B47D1D5CAC14 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = YTMusicGo;
+			packageProductDependencies = (
+			);
+			productName = YTMusicGo;
+			productReference = 9C31C17E18DACDC211C1ACBD /* YTMusicGo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		12C4554ABF2BD99A4FF5AC6E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					3F8901C0F95059137F35822D = {
+						DevelopmentTeam = UQ37S3JVJT;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 1864007F2B8234883D1338E5 /* Build configuration list for PBXProject "YTMusicGo" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 99733204F3D7D8FF42242ABF;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 8C126C979CD3AF6279120148 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3F8901C0F95059137F35822D /* YTMusicGo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CC20924DFBB6B47D1D5CAC14 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A75A80EABA72516CE970C16F /* inject-ads.js in Resources */,
+				5EBC68B7BA062B0400521C0A /* inject-order.js in Resources */,
+				5ADD8EF90CD5AC527742B57C /* inject-ui.js in Resources */,
+				CDA9229965B6B879F8960370 /* rules.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2CB0EE9211B55A0E6AF3DD0A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8CDBB58820BCF0DA99552182 /* AdBlock.swift in Sources */,
+				D49831AF510675F24D95B741 /* App.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		0D3C2BE73F7B6F97456A399C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		18B80BE153B919BF13B868D8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		78025D91C66760D9F004F150 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = UQ37S3JVJT;
+				INFOPLIST_FILE = YTMusicGo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.treendz.ytmusicgo;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		801276C1053E397ADC6AF71C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = UQ37S3JVJT;
+				INFOPLIST_FILE = YTMusicGo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.treendz.ytmusicgo;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1864007F2B8234883D1338E5 /* Build configuration list for PBXProject "YTMusicGo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				18B80BE153B919BF13B868D8 /* Debug */,
+				0D3C2BE73F7B6F97456A399C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		ACA49FF2FB0CCB2270C6211C /* Build configuration list for PBXNativeTarget "YTMusicGo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				78025D91C66760D9F004F150 /* Debug */,
+				801276C1053E397ADC6AF71C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 12C4554ABF2BD99A4FF5AC6E /* Project object */;
+}
