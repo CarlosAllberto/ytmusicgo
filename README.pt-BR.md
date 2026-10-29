@@ -7,6 +7,7 @@
 ![iOS 17+](https://img.shields.io/badge/iOS-17%2B-black)
 ![Swift 5.9](https://img.shields.io/badge/Swift-5.9-orange)
 ![Sem dependências](https://img.shields.io/badge/depend%C3%AAncias-nenhuma-lightgrey)
+[![Licença MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-blue)](LICENSE)
 
 [Recursos](#recursos) • [Instalação](#instalação) • [Uso](#uso) • [Como funciona](#como-funciona) • [Personalização](#personalização) • [Limitações](#limitações)
 
