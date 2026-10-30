@@ -6,8 +6,11 @@ import AVFoundation
 struct YTMusicGoApp: App {
     init() {
         // Sem categoria playback o iOS silencia a página ao bloquear a tela.
-        try? AVAudioSession.sharedInstance().setCategory(.playback)
-        try? AVAudioSession.sharedInstance().setActive(true)
+        // setActive bloqueia a thread principal, então roda fora dela.
+        DispatchQueue.global().async {
+            try? AVAudioSession.sharedInstance().setCategory(.playback)
+            try? AVAudioSession.sharedInstance().setActive(true)
+        }
     }
 
     var body: some Scene {
