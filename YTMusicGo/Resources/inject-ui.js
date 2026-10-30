@@ -397,13 +397,45 @@
   };
   window.__ytmTab = (browseId) => navigate({ browseEndpoint: { browseId } });
 
+  // Tocar uma faixa empilha /watch no histórico, e parar nele abriria o player. A cópia da página atual fica logo antes
+  // (artista, /watch, artista). A lista permite saltar tudo de uma vez com history.go, sem passar pelo player.
+  const stack = [location.href];
+  let pos = 0;
+  const { pushState, replaceState } = history;
+  history.pushState = function (...args) {
+    pushState.apply(this, args);
+    stack.length = ++pos;
+    stack.push(location.href);
+  };
+  history.replaceState = function (...args) {
+    replaceState.apply(this, args);
+    stack[pos] = location.href;
+  };
+  window.addEventListener('popstate', () => {
+    if (stack[pos] === location.href) return;
+    const i = stack.lastIndexOf(location.href, pos);
+    pos = i >= 0 ? i : Math.max(stack.indexOf(location.href), 0);
+  });
+  const goBack = () => {
+    const skip = (url) => {
+      const path = new URL(url).pathname;
+      return path.startsWith('/watch') || path === location.pathname;
+    };
+    let i = pos - 1;
+    while (i >= 0 && skip(stack[i])) i--;
+    if (i < 0) return goHome();
+    const steps = pos - i;
+    pos = i;
+    history.go(-steps);
+  };
+
   const updateBack = () => {
     let b = $('.ytm-back');
     if (!b) {
       b = document.createElement('button');
       b.className = 'ytm-back';
       b.setAttribute('aria-label', 'Voltar');
-      b.addEventListener('click', () => history.back());
+      b.addEventListener('click', goBack);
       document.body.append(b);
     }
     // A rota do artista pode ser /channel/ ou /browse/, então vale também o cabeçalho visível.
