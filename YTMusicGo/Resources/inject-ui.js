@@ -361,13 +361,13 @@
     let tries = 0;
     const timer = setInterval(() => {
       const v = $('video');
-      if (v && v.currentTime + 2 < t) {
+      // Logo após o `emptied` a fonte ainda está vazia (readyState 0) e o seek seria descartado.
+      if (v && v.readyState >= 1 && v.currentTime + 2 < t) {
         v.currentTime = t;
         if (wasPaused) (mp.pauseVideo ? mp.pauseVideo() : v.pause()); // a navegação religa; pausar pelo player mantém o botão em sincronia
-        clearInterval(timer);
-      } else if (++tries > 20) {
-        clearInterval(timer);
       }
+      // Só para quando a posição foi confirmada (ou no limite de tentativas).
+      if ((v && v.readyState >= 1 && v.currentTime + 2 >= t) || ++tries > 20) clearInterval(timer);
     }, 200);
   };
 
