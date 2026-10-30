@@ -12,6 +12,12 @@
       'tp-yt-app-drawer#guide', // gaveta lateral que o botão abre
       'ytmusic-menu-service-item-download-renderer', // "Baixar" nos três pontinhos
       'tp-yt-paper-toast', // toasts, ex.: "Iniciando a rádio"
+      'ytmusic-player-page .fullscreen-button', // tela cheia sobre a capa
+      'ytmusic-player .ytp-fullscreen-button',
+      'ytmusic-player [aria-label*="tela inteira" i]',
+      'ytmusic-player [title*="tela inteira" i]',
+      'ytmusic-responsive-list-item-renderer ytmusic-like-button-renderer', // curtir e descurtir ao passar o dedo/mouse nas músicas
+      'ytmusic-responsive-list-item-renderer ytmusic-menu-renderer', // três pontinhos das músicas
     ],
     // Escondidos só na página inicial (rota "/").
     homeHide: ['ytmusic-chip-cloud-renderer'], // chips Podcasts, Para treinar etc.
@@ -26,9 +32,12 @@
     searchHide: [
       'ytmusic-tabbed-search-results-renderer ytmusic-tabs', // abas YT MUSIC e BIBLIOTECA
       'ytmusic-tabbed-search-results-renderer ytmusic-chip-cloud-renderer', // filtros Artistas, Músicas etc.
+      'ytmusic-card-shelf-renderer #actions', // Aleatório e Mix no resultado principal
     ],
-    searchCard: 'ytmusic-card-shelf-renderer', // resultado principal da busca
     cardRow: 'ytmusic-responsive-list-item-renderer',
+    card: 'ytmusic-two-row-item-renderer',
+    cardLinks: ['.title a', '.secondary-flex-columns a', '.fixed-columns a', '.subtitle a'], // título, artista e álbum dentro dos cards
+    cardControls: 'a, button, input, yt-icon-button, ytmusic-play-button-renderer, ytmusic-menu-renderer, tp-yt-paper-checkbox', // o site já trata o toque nestes
     firstTrack: 'ytmusic-shelf-renderer ytmusic-responsive-list-item-renderer',
     player: 'ytmusic-app-layout',
     subsBrowseId: 'FEmusic_library_corpus_artists',
@@ -43,6 +52,40 @@
     ${CONFIG.hide.join(',')} { display: none !important; }
     html[ytm-home] ${CONFIG.homeHide.join(`, html[ytm-home] `)} { display: none !important; }
     ${CONFIG.searchHide.join(',')} { display: none !important; }
+    /* Voltar no topo das páginas de artista e de busca. */
+    .ytm-back { position: fixed; top: 10px; left: 16px; z-index: 5000; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: rgba(255,255,255,.15); color: #fff; cursor: pointer; flex: none;
+      display: flex; align-items: center; justify-content: center; }
+    .ytm-back[hidden], html:not([ytm-search-page]):has(ytmusic-search-box[opened]) .ytm-back { display: none; }
+    /* O botão fica fora do cabeçalho, por cima dele; a busca abre espaço à esquerda. */
+    /* Com o campo vazio e sem foco o site recolhe a busca a um ícone, que fica no lugar original. */
+    html[ytm-search-page] ytmusic-nav-bar ytmusic-search-box:has(input:focus, input:not(:placeholder-shown)) { transform: translateX(52px); width: calc(100vw - 84px) !important; max-width: none !important; }
+    html[ytm-search-page]:has(ytmusic-search-box input:focus, ytmusic-search-box input:not(:placeholder-shown)) ytmusic-nav-bar .right-content { display: none !important; }
+    .ytm-back::before { content: ""; width: 30px; height: 30px; background: currentColor; transform: scaleX(-1);
+      -webkit-mask: var(--ytm-chevron) center / contain no-repeat; mask: var(--ytm-chevron) center / contain no-repeat; }
+    /* Artista: cabeçalho só com o voltar. */
+    html[ytm-artist] ytmusic-nav-bar ytmusic-logo, html[ytm-artist] ytmusic-nav-bar ytmusic-search-box,
+    html[ytm-artist] ytmusic-nav-bar .center-content, html[ytm-artist] ytmusic-nav-bar .right-content { display: none !important; }
+    /* Biblioteca em 3 colunas. */
+    html[ytm-library] ytmusic-grid-renderer #items { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 16px 12px !important; }
+    html[ytm-library] ytmusic-grid-renderer ${CONFIG.card} { width: auto !important; min-width: 0 !important; margin: 0 !important; }
+    /* Sem ícone e escurecimento na miniatura da música, exceto na faixa atual (indicador de tocando). */
+    ${[CONFIG.cardRow, CONFIG.card].map((c) => `${c}:not([play-button-state="playing"]):not([play-button-state="paused"]):not([play-button-state="loading"]) ytmusic-item-thumbnail-overlay-renderer`).join(',')} { display: none !important; }
+    /* Círculo de hover e toque dos botões do site. */
+    yt-interaction { display: none !important; }
+    /* Links internos dos cards: o toque passa para o card e não há efeito de hover. */
+    ${CONFIG.cardLinks.flatMap((l) => [`${CONFIG.cardRow} ${l}`, `${CONFIG.card} ${l}`]).join(',')} {
+      pointer-events: none !important; text-decoration: none !important; color: inherit !important; }
+    /* No iOS, sem cursor pointer o toque em elemento comum não gera click. */
+    ${CONFIG.cardRow}, ${CONFIG.card} { cursor: pointer; }
+    /* Voltar faixa na barra de baixo (ver updatePrev). */
+    ytmusic-player-bar .ytm-prev { width: 40px !important; height: 40px !important; min-width: 40px; padding: 0; border: 0; background: transparent;
+      color: #fff; cursor: pointer; flex: none; position: static !important; opacity: 1 !important; visibility: visible !important;
+      display: flex !important; align-items: center; justify-content: center; }
+    .ytm-prev::before { content: ""; width: 32px; height: 32px; background: currentColor;
+      -webkit-mask: var(--ytm-prev) center / contain no-repeat; mask: var(--ytm-prev) center / contain no-repeat; }
+    /* Início: cabeçalho sempre preto (o site só escurece o fundo depois de rolar). */
+    html[ytm-home] ${CONFIG.player} #nav-bar-background { opacity: 1 !important; background: #000 !important; }
+    html[ytm-home] ytmusic-nav-bar { background: #000 !important; }
     [ytm-hidden] { display: none !important; }
     /* A barra de navegação passa 2px da largura e gerava scroll lateral; carrosseis já rolam por setas. */
     html, body { overflow-x: clip !important; }
@@ -88,11 +131,6 @@
     ${CONFIG.artistHeader} .buttons .subscribe { order: 3; margin: 0 0 0 auto !important; }
     ${CONFIG.artistHeader} .buttons .play-buttons > :not(.play-button):not(.radio-button) { order: 4; }
     ${CONFIG.artistHeader} .buttons .play-button, ${CONFIG.artistHeader} .buttons .radio-button { margin: 0 !important; }
-    ${CONFIG.searchCard} #actions { gap: 8px !important; }
-    ${CONFIG.searchCard} #actions > yt-button-renderer { flex: 1 1 0; min-width: 0; }
-    ${CONFIG.searchCard} #actions .ytm-start { order: -1; flex: none; }
-    ${CONFIG.searchCard} #actions yt-button-renderer button { width: 100%; background: transparent !important; color: #fff !important;
-      border: 1px solid rgba(255,255,255,.3) !important; }
     .ytm-start { height: 36px; padding: 0 16px; border: 0; border-radius: 18px; background: #fff; color: #030303;
       font: 500 14px Roboto, Arial, sans-serif; cursor: pointer; flex: none; }
     ${CONFIG.artistHeader} .play-button button, ${CONFIG.artistHeader} .radio-button button {
@@ -107,6 +145,7 @@
     ${CONFIG.artistHeader} .subscribe[is-subscribed] button::before { -webkit-mask-image: var(--ytm-check); mask-image: var(--ytm-check); }
     :root {
       --ytm-chevron: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M9.4 6 8 7.4l4.6 4.6L8 16.6 9.4 18l6-6z'/></svg>");
+      --ytm-prev: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M6 6h2v12H6zm3.5 6 8.5 6V6z'/></svg>");
       --ytm-heart: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z'/></svg>");
       --ytm-check: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/></svg>");
     }
@@ -236,6 +275,26 @@
     setTimeout(sync, 100);
   };
 
+  // Toca a faixa pelo endpoint do botão de play do site. Clique sintético não dispara o tap do Polymer
+  // quando a página recebeu toque real (ele ignora "mouse" por um tempo), então só serve de reserva.
+  const playRow = (play) => {
+    if (!play) return;
+    const ep = play.data && play.data.playNavigationEndpoint;
+    if (ep) navigate(ep);
+    else play.dispatchEvent(new MouseEvent('click', { bubbles: false }));
+  };
+
+  // Card inteiro clicável: no celular é difícil acertar só o título.
+  const openCard = (e) => {
+    const card = e.target.closest(`${CONFIG.cardRow}, ${CONFIG.card}`);
+    if (!card || e.target.closest(CONFIG.cardControls)) return;
+    const ep = card.data && card.data.navigationEndpoint;
+    const link = $('a[href]', card);
+    if (ep) navigate(ep);
+    else if (card.matches(CONFIG.cardRow)) playRow($('ytmusic-play-button-renderer', card));
+    else if (link) link.click();
+  };
+
   const homeSection = () => $$(CONFIG.section).find((e) => e.offsetParent !== null);
 
   // Busca aberta: na rota /search ou com o campo em foco.
@@ -252,6 +311,7 @@
     if (home && !wasHome && subs) subs.at = 0;
     wasHome = home;
     document.documentElement.toggleAttribute('ytm-home', home);
+    document.documentElement.toggleAttribute('ytm-library', location.pathname.startsWith('/library'));
     const own = $('#ytm-subs');
     if (!home) {
       // O site reaproveita o mesmo container para outras páginas.
@@ -293,8 +353,7 @@
     b.addEventListener('click', () => {
       // Toca a primeira música da lista, na ordem original (sem aleatório).
       const row = $(CONFIG.firstTrack);
-      const play = row && $('ytmusic-play-button-renderer', row);
-      if (play) play.click();
+      playRow(row && $('ytmusic-play-button-renderer', row));
     });
     bar.prepend(b);
   };
@@ -307,19 +366,77 @@
     }
   };
 
-  // Busca: Iniciar antes de Aleatório e Mix no resultado principal.
-  const updateSearch = () => {
-    for (const card of $$(CONFIG.searchCard)) {
-      const bar = $('#actions', card);
-      if (!bar || $('.ytm-start', bar) || $$('yt-button-renderer', bar).length < 2) continue;
-      const b = document.createElement('button');
-      b.className = 'ytm-start';
-      b.textContent = 'Iniciar';
+  // Na barra de baixo o site esconde .left-controls-buttons; o play que aparece é outro elemento.
+  const updatePrev = () => {
+    const bar = $('ytmusic-player-bar:not(#top-player-bar)');
+    const play = bar && $$('.play-pause-button', bar).find((e) => e.offsetWidth > 0);
+    if (!play || (play.previousElementSibling && play.previousElementSibling.matches('.ytm-prev'))) return;
+    let b = $('.ytm-prev', bar);
+    if (!b) {
+      b = document.createElement('button');
+      b.className = 'ytm-prev';
+      b.setAttribute('aria-label', 'Anterior');
       b.addEventListener('click', () => {
-        const play = $(`${CONFIG.cardRow} ytmusic-play-button-renderer`, card);
-        if (play) play.click();
+        const mp = $('#movie_player');
+        if (mp && mp.previousVideo) mp.previousVideo();
       });
-      bar.prepend(b);
+    }
+    play.before(b);
+  };
+
+  // Rota e estado do player: a tab bar nativa destaca a aba atual e some com o player aberto.
+  const tabsKey = () => `${location.pathname}|${!!$('ytmusic-player-bar[player-page-open]')}`;
+  let lastTabs = '';
+  const updateTabs = () => {
+    const key = tabsKey();
+    const h = window.webkit && window.webkit.messageHandlers.ytmTabs;
+    if (!h || key === lastTabs) return;
+    lastTabs = key;
+    const [path, open] = key.split('|');
+    h.postMessage({ path, playerOpen: open === 'true' });
+  };
+  window.__ytmTab = (browseId) => navigate({ browseEndpoint: { browseId } });
+
+  const updateBack = () => {
+    let b = $('.ytm-back');
+    if (!b) {
+      b = document.createElement('button');
+      b.className = 'ytm-back';
+      b.setAttribute('aria-label', 'Voltar');
+      b.addEventListener('click', () => history.back());
+      document.body.append(b);
+    }
+    // A rota do artista pode ser /channel/ ou /browse/, então vale também o cabeçalho visível.
+    const header = $(CONFIG.artistHeader);
+    const artistHeader = header && header.offsetParent !== null && $('.subscribe', header);
+    // Com o player aberto a rota é /watch, mas o cabeçalho do artista segue visível por baixo.
+    const artist = location.pathname.startsWith('/channel/') || (!!artistHeader && !location.pathname.startsWith('/watch'));
+    const search = location.pathname.startsWith('/search');
+    b.hidden = !artist && !search;
+    document.documentElement.toggleAttribute('ytm-artist', artist);
+    document.documentElement.toggleAttribute('ytm-search-page', search);
+  };
+
+  // No toque o hover fica preso no último item tocado: tira as regras :hover do CSS do site.
+  // shortcut: folhas de outra origem não podem ser lidas e ficam de fora, tratar caso a caso se algum hover restar.
+  const hoverDone = new WeakMap(); // folha -> nº de regras já limpas; o site adiciona regras com o tempo
+  const stripHover = (group) => {
+    for (let i = group.cssRules.length - 1; i >= 0; i--) {
+      const rule = group.cssRules[i];
+      if (rule.cssRules && rule.cssRules.length) stripHover(rule);
+      if (!rule.selectorText || !rule.selectorText.includes(':hover')) continue;
+      const keep = rule.selectorText.split(',').filter((sel) => !sel.includes(':hover'));
+      if (keep.length) rule.selectorText = keep.join(',');
+      else group.deleteRule(i);
+    }
+  };
+  const removeHover = () => {
+    for (const sheet of document.styleSheets) {
+      try {
+        if (hoverDone.get(sheet) === sheet.cssRules.length) continue;
+        stripHover(sheet);
+        hoverDone.set(sheet, sheet.cssRules.length);
+      } catch (e) {} // folha de outra origem
     }
   };
 
@@ -336,9 +453,12 @@
       updateHome();
       updateSearching();
       updateArtist();
-      updateSearch();
       updateFirst();
       updateMenus();
+      updatePrev();
+      updateTabs();
+      updateBack();
+      removeHover();
     } catch (e) {
       // nunca quebrar a página
     }
@@ -387,6 +507,7 @@
     document.documentElement.append(style);
     new MutationObserver(schedule).observe(document, { childList: true, subtree: true });
     window.addEventListener('popstate', schedule);
+    document.addEventListener('click', openCard, true);
     document.addEventListener('focusin', schedule);
     document.addEventListener('focusout', schedule);
     schedule();
