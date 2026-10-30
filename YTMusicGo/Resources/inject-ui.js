@@ -494,6 +494,7 @@
   // O app chama isto ao abrir o popover: com faixa carregada (tocando ou pausada) = mostra o player; sem faixa = início.
   window.__ytmOnOpen = () => {
     try {
+      run(); // antes de tudo: o atributo ytm-home pode estar desatualizado
       if (subs) subs.at = 0; // reabrir o popover também atualiza os inscritos
       const v = $('video');
       if (v && v.currentSrc) openPlayer(v);
@@ -508,6 +509,15 @@
     new MutationObserver(schedule).observe(document, { childList: true, subtree: true });
     window.addEventListener('popstate', schedule);
     document.addEventListener('click', openCard, true);
+    document.addEventListener('visibilitychange', schedule);
+    // O site troca de página reaproveitando elementos (só atributos mudam), então o observer não vê a rota mudar.
+    let lastPath = tabsKey();
+    setInterval(() => {
+      if (tabsKey() !== lastPath) {
+        lastPath = tabsKey();
+        schedule();
+      }
+    }, 300);
     document.addEventListener('focusin', schedule);
     document.addEventListener('focusout', schedule);
     schedule();
