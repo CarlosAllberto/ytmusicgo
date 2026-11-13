@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="docs/icon.png" alt="Ícone do YTMusicGo" width="128">
+
 # YTMusicGo
 
 **YouTube Music no seu iPhone, sem anúncios.**
