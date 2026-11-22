@@ -37,6 +37,7 @@ The app loads the official YouTube Music website in a `WKWebView`. Your login is
 - **Quick start:** artist pages and search results get an **Iniciar** button before Aleatório and Mix.
 - **Original track order:** shuffle is turned off when a playlist or album starts, and playback stops at the end instead of drifting to suggestions.
 - **Background audio:** music keeps playing when you lock the screen or switch apps.
+- **Home Screen widget:** a small widget shows the cover, track and artist, with a button to play or pause without opening the app.
 
 ## Install
 
@@ -74,18 +75,23 @@ Open the app and sign in with your Google account on the first launch. After tha
 
 ```
 YTMusicGo/
-├── App.swift       App entry point, audio session and WebView
-├── AdBlock.swift   Compiles the network block rules
-└── Resources/      Injected scripts and network rules
+├── App.swift              App entry point, audio session and WebView
+├── AdBlock.swift          Compiles the network block rules
+├── NowPlayingBridge.swift Sends the current track to the widget
+└── Resources/             Injected scripts and network rules
+YTMusicGoWidget/           Now Playing widget
+Shared/                    Code shared by the app and the widget
 ```
 
 - **Desktop site.** The injected scripts depend on the `ytmusic-app` DOM, which the mobile site does not have. The `WKWebView` uses a desktop user agent and desktop content mode.
 - **Audio session.** The app sets the `.playback` category and enables the `audio` background mode. Without them, iOS mutes the page when the screen locks.
 - **Block rules first.** The page loads only after every `Resources/rules*.json` file compiles, or ad requests would slip through.
-- **Three injected scripts** in [`YTMusicGo/Resources`](YTMusicGo/Resources):
+- **Four injected scripts** in [`YTMusicGo/Resources`](YTMusicGo/Resources):
   - `inject-ads.js` skips ads and removes promotions.
   - `inject-order.js` keeps the original track order.
   - `inject-ui.js` hides elements and adds the carousel and the buttons.
+  - `inject-nowplaying.js` sends the current track to the widget and handles its play button.
+- **Widget.** The app saves the track in the `group.com.treendz.ytmusicgo` App Group. The play button runs in the app process, so it works only while the app is open or playing in the background.
 
 ## Customize
 
@@ -96,6 +102,7 @@ YouTube changes its page often. Each script keeps its selectors in a `CONFIG` ob
 | Ad selectors | `CONFIG` in `inject-ads.js` |
 | Track order selectors | `CONFIG` in `inject-order.js` |
 | Hidden elements, carousel, buttons | `CONFIG` in `inject-ui.js` |
+| Widget track info and play button | `CONFIG` in `inject-nowplaying.js` |
 
 **Network rules.** Every `Resources/rules*.json` file is compiled at launch. To add a list, put a `rules-name.json` file in `YTMusicGo/Resources` in the WebKit content rule list format, then run `xcodegen generate`.
 

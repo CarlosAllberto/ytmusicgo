@@ -13,6 +13,7 @@ struct YTMusicGoApp: App {
             try? AVAudioSession.sharedInstance().setCategory(.playback)
             try? AVAudioSession.sharedInstance().setActive(true)
         }
+        PlayPauseIntent.toggle = { NowPlayingBridge.shared.toggle() }
     }
 
     var body: some Scene {
@@ -88,16 +89,18 @@ struct WebView: UIViewRepresentable {
 
         let ucc = config.userContentController
         ucc.addUserScript(WKUserScript(source: "window.__ytmOrder = { enabled: true };", injectionTime: .atDocumentStart, forMainFrameOnly: true))
-        for (name, time) in [("inject-ads", WKUserScriptInjectionTime.atDocumentStart), ("inject-order", .atDocumentEnd), ("inject-ui", .atDocumentEnd)] {
+        for (name, time) in [("inject-ads", WKUserScriptInjectionTime.atDocumentStart), ("inject-order", .atDocumentEnd), ("inject-ui", .atDocumentEnd), ("inject-nowplaying", .atDocumentEnd)] {
             if let url = Bundle.main.url(forResource: name, withExtension: "js"), let src = try? String(contentsOf: url) {
                 ucc.addUserScript(WKUserScript(source: src, injectionTime: time, forMainFrameOnly: true))
             }
         }
 
         ucc.add(tabs, name: "ytmTabs")
+        ucc.add(NowPlayingBridge.shared, name: "ytmNowPlaying")
 
         let web = WKWebView(frame: .zero, configuration: config)
         tabs.web = web
+        NowPlayingBridge.shared.web = web
         web.customUserAgent = Self.userAgent
         web.isOpaque = false
         web.backgroundColor = .black

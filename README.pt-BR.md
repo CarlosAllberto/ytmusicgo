@@ -37,6 +37,7 @@ O app carrega o site oficial do YouTube Music em um `WKWebView`. Seu login é ma
 - **Início rápido:** páginas de artista e resultados de busca ganham um botão **Iniciar** antes de Aleatório e Mix.
 - **Ordem original das faixas:** o aleatório é desligado ao iniciar uma playlist ou álbum, e a reprodução para no fim em vez de seguir para sugestões.
 - **Áudio em segundo plano:** a música continua tocando com a tela bloqueada ou em outro app.
+- **Widget na tela inicial:** um widget pequeno mostra a capa, a música e o artista, com um botão para tocar ou pausar sem abrir o app.
 
 ## Instalação
 
@@ -74,18 +75,23 @@ Abra o app e entre com sua conta Google na primeira vez. Depois, use o YouTube M
 
 ```
 YTMusicGo/
-├── App.swift       Entrada do app, sessão de áudio e WebView
-├── AdBlock.swift   Compila as regras de bloqueio de rede
-└── Resources/      Scripts injetados e regras de rede
+├── App.swift              Entrada do app, sessão de áudio e WebView
+├── AdBlock.swift          Compila as regras de bloqueio de rede
+├── NowPlayingBridge.swift Envia a faixa atual para o widget
+└── Resources/             Scripts injetados e regras de rede
+YTMusicGoWidget/           Widget Tocando agora
+Shared/                    Código comum ao app e ao widget
 ```
 
 - **Site desktop.** Os scripts injetados dependem do DOM do `ytmusic-app`, que o site mobile não tem. O `WKWebView` usa user agent e modo de conteúdo desktop.
 - **Sessão de áudio.** O app define a categoria `.playback` e ativa o modo de fundo `audio`. Sem isso, o iOS silencia a página ao bloquear a tela.
 - **Regras de bloqueio primeiro.** A página só carrega depois que todos os arquivos `Resources/rules*.json` compilam, senão requisições de anúncio passam.
-- **Três scripts injetados** em [`YTMusicGo/Resources`](YTMusicGo/Resources):
+- **Quatro scripts injetados** em [`YTMusicGo/Resources`](YTMusicGo/Resources):
   - `inject-ads.js` pula anúncios e remove promoções.
   - `inject-order.js` mantém a ordem original das faixas.
   - `inject-ui.js` esconde elementos e adiciona o carrossel e os botões.
+  - `inject-nowplaying.js` envia a faixa atual para o widget e atende o botão de tocar dele.
+- **Widget.** O app grava a faixa no App Group `group.com.treendz.ytmusicgo`. O botão de tocar roda no processo do app, então só funciona com o app aberto ou tocando em segundo plano.
 
 ## Personalização
 
@@ -96,6 +102,7 @@ O YouTube muda a página com frequência. Cada script guarda seus seletores em u
 | Seletores de anúncio | `CONFIG` em `inject-ads.js` |
 | Seletores da ordem das faixas | `CONFIG` em `inject-order.js` |
 | Elementos escondidos, carrossel, botões | `CONFIG` em `inject-ui.js` |
+| Dados e botão do widget | `CONFIG` em `inject-nowplaying.js` |
 
 **Regras de rede.** Todo arquivo `Resources/rules*.json` é compilado ao abrir o app. Para adicionar uma lista, coloque um arquivo `rules-nome.json` em `YTMusicGo/Resources` no formato de content rule list do WebKit e rode `xcodegen generate`.
 

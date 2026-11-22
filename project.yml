@@ -7,7 +7,13 @@ targets:
   YTMusicGo:
     type: application
     platform: iOS
-    sources: [YTMusicGo]
+    sources: [YTMusicGo, Shared]
+    dependencies:
+      - target: YTMusicGoWidget
+    entitlements:
+      path: YTMusicGo/YTMusicGo.entitlements
+      properties:
+        com.apple.security.application-groups: [group.com.treendz.ytmusicgo]
     info:
       path: YTMusicGo/Info.plist
       properties:
@@ -19,6 +25,27 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.treendz.ytmusicgo
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        SWIFT_VERSION: "5.9"
+        TARGETED_DEVICE_FAMILY: "1"
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: UQ37S3JVJT
+  YTMusicGoWidget:
+    type: app-extension
+    platform: iOS
+    sources: [YTMusicGoWidget, Shared]
+    info:
+      path: YTMusicGoWidget/Info.plist
+      properties:
+        CFBundleDisplayName: YTMusicGo
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    entitlements:
+      path: YTMusicGoWidget/YTMusicGoWidget.entitlements
+      properties:
+        com.apple.security.application-groups: [group.com.treendz.ytmusicgo]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.treendz.ytmusicgo.widget
         SWIFT_VERSION: "5.9"
         TARGETED_DEVICE_FAMILY: "1"
         CODE_SIGN_STYLE: Automatic
