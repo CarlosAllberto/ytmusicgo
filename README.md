@@ -11,19 +11,21 @@
 ![No dependencies](https://img.shields.io/badge/dependencies-none-lightgrey)
 [![License MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-[Features](#features) • [Install](#install) • [Usage](#usage) • [How it works](#how-it-works) • [Customize](#customize) • [Limitations](#limitations)
+[Features](#features) • [Install](#install) • [Usage](#usage) • [How it works](#how-it-works) • [Customize](#customize) • [Limitations](#limitations) • [Development](#development)
 
 English • <a href="README.pt-BR.md">Português</a>
 
 </div>
 
-YTMusicGo is a native iOS app that plays [YouTube Music](https://music.youtube.com) full screen. It blocks ads, hides the clutter and keeps the music playing when the screen is locked.
+YTMusicGo is an iOS app with a native SwiftUI interface for [YouTube Music](https://music.youtube.com). Home, search, artists, albums, playlists, your library and lyrics are drawn natively from YouTube Music's internal API.
 
-The app loads the official YouTube Music website in a `WKWebView`. Your login is kept between launches.
+Audio plays through the official player in a hidden `WKWebView`, with ads blocked, and keeps playing when the screen is locked. Your login is kept between launches.
 
 <p align="center">
-  <img src="docs/screenshots/home.png" alt="Home with the subscribed artists carousel" width="32%">
-  <img src="docs/screenshots/player.png" alt="Player page" width="32%">
+  <img src="docs/screenshots/home.png" alt="Home with subscribed artists and song mixes" width="24%">
+  <img src="docs/screenshots/mini-player.png" alt="Home with the floating mini player" width="24%">
+  <img src="docs/screenshots/player.png" alt="Player with progress, controls and queue" width="24%">
+  <img src="docs/screenshots/widget.png" alt="Home screen widget with cover and pause button" width="24%">
 </p>
 
 > [!NOTE]
@@ -31,12 +33,15 @@ The app loads the official YouTube Music website in a `WKWebView`. Your login is
 
 ## Features
 
-- **No ads:** network rules block ad requests and an injected script skips and hides what gets through.
-- **Subscribed artists carousel:** the home page starts with the artists you follow.
-- **Cleaner interface:** no hamburger menu and no **Baixar** item in the track menus.
-- **Quick start:** artist pages and search results get an **Iniciar** button before Aleatório and Mix.
-- **Original track order:** shuffle is turned off when a playlist or album starts, and playback stops at the end instead of drifting to suggestions.
-- **Background audio:** music keeps playing when you lock the screen or switch apps.
+- **Native interface:** home, artist, album and playlist pages, and your library (saved playlists and albums, liked songs, subscribed artists) in SwiftUI, not a web page. Uses Liquid Glass on iOS 26.
+- **Search as you type:** top result plus artists, songs and albums.
+- **Subscribed artists first:** when you are signed in, home and library start with the artists you follow.
+- **Lyrics with translation:** the player screen shows the lyrics when YouTube Music has them, and **Traduzir** translates them to Portuguese.
+- **Queue:** "A seguir" list, shuffle, repeat all or one, and seeking on the progress bar. Artist pages get **Iniciar** and **Aleatório** buttons, and track lists get **Tocar tudo**.
+- **Original track order:** playback stops at the end of the queue instead of drifting to YouTube's automatic radio.
+- **Home screen widget:** a small widget with the cover, title, artist and a play/pause button.
+- **No ads:** network rules block ad requests and an injected script skips what gets through.
+- **Background audio:** music keeps playing when you lock the screen or switch apps, with the lock screen and Control Center controls.
 
 ## Install
 
@@ -44,7 +49,7 @@ There is no App Store build. Install from source on your own iPhone.
 
 Requirements:
 
-- macOS with Xcode 15 or later
+- macOS with Xcode 26 or later
 - [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 - An iPhone with iOS 17 or later and **Developer Mode** turned on (Settings, Privacy & Security)
 - An Apple ID signed in at Xcode, Settings, Accounts
@@ -68,46 +73,73 @@ To try it in the iOS Simulator, pick any simulator as the destination. Use iOS 1
 
 ## Usage
 
-Open the app and sign in with your Google account on the first launch. After that, use YouTube Music as usual.
+| Action | How |
+| --- | --- |
+| Sign in | Tap the person icon at the top right |
+| Search | Tap the magnifying glass and type |
+| Play a track | Tap it. The rest of the list becomes the queue |
+| Open the player | Tap the mini player at the bottom |
+| Close the player | Drag it down, or tap the arrow at the top |
+| Open the library or sign out | Tap your profile photo |
+| Open an artist | Tap the artist name under a track |
+
+Without signing in, search, artists, albums and playlists work. Home shows a notice asking you to sign in, and the library needs an account.
 
 ## How it works
 
 ```
 YTMusicGo/
-├── App.swift       App entry point, audio session and WebView
-├── AdBlock.swift   Compiles the network block rules
-└── Resources/      Injected scripts and network rules
+├── App/App.swift            App entry point, home, pages, mini player
+├── Views/PlayerView.swift   Full screen player, queue, lyrics
+├── Services/
+│   ├── InnerTube.swift      YouTube Music internal API client and parser
+│   ├── Player.swift         Hidden WKWebView, queue, playback control
+│   ├── Auth.swift           Google sign in and authenticated headers
+│   ├── Translate.swift      Lyrics translation
+│   ├── Prefs.swift          Settings
+│   └── Support.swift        High resolution thumbnails
+├── Shared/NowPlaying.swift  Current track shared with the widget
+├── WebView/AdBlock.swift    Compiles the network block rules
+└── Resources/               inject-ads.js, rules.json, icon and logo
+YTMusicGoWidget/             Home screen widget
 ```
 
-- **Desktop site.** The injected scripts depend on the `ytmusic-app` DOM, which the mobile site does not have. The `WKWebView` uses a desktop user agent and desktop content mode.
-- **Audio session.** The app sets the `.playback` category and enables the `audio` background mode. Without them, iOS mutes the page when the screen locks.
-- **Block rules first.** The page loads only after every `Resources/rules*.json` file compiles, or ad requests would slip through.
-- **Three injected scripts** in [`YTMusicGo/Resources`](YTMusicGo/Resources):
-  - `inject-ads.js` skips ads and removes promotions.
-  - `inject-order.js` keeps the original track order.
-  - `inject-ui.js` hides elements and adds the carousel and the buttons.
+- **Data:** [`InnerTube.swift`](YTMusicGo/Services/InnerTube.swift) calls `music.youtube.com/youtubei/v1` (`browse`, `search`, `next`) as the `WEB_REMIX` client. The parser walks the JSON looking for shelves and items instead of fixed paths, because YouTube changes the shape often.
+- **Search:** without a filter the API only returns the top card, so the app runs three filtered searches (artists, songs, albums) in parallel, plus one for the best result.
+- **Sign in:** a Google sign in page in a `WKWebView`. The app is signed in when the `SAPISID` cookie exists, and sends it with a `SAPISIDHASH` header. The player shares the same cookies, so it plays with your account and Premium.
+- **Player:** [`Player.swift`](YTMusicGo/Services/Player.swift) loads `music.youtube.com/watch` in a `WKWebView` that never shows and is never destroyed. The official player handles signatures and streaming. The app controls the `<video>` element through JavaScript and keeps its own queue.
+- **Lock screen:** WebKit publishes the track to the system from the site's `navigator.mediaSession`. A script sends next and previous back to the app's queue.
+- **Widget:** the app writes the current track and cover to an App Group and reloads the widget. The play button is an `AudioPlaybackIntent`, which iOS runs inside the app.
+- **Ads:** the page loads only after every `Resources/rules*.json` file compiles, and `inject-ads.js` skips and mutes ads that get through.
 
 ## Customize
 
-YouTube changes its page often. Each script keeps its selectors in a `CONFIG` object at the top of the file:
-
 | What | Where |
 | --- | --- |
-| Ad selectors | `CONFIG` in `inject-ads.js` |
-| Track order selectors | `CONFIG` in `inject-order.js` |
-| Hidden elements, carousel, buttons | `CONFIG` in `inject-ui.js` |
+| API client version | `clientVersion` in `InnerTube.post` |
+| Search filters | `params` in `InnerTube.search` |
+| Ad selectors | `CONFIG` in [`inject-ads.js`](YTMusicGo/Resources/inject-ads.js) |
+| Colors | `Theme` in [`App.swift`](YTMusicGo/App/App.swift) |
 
 **Network rules.** Every `Resources/rules*.json` file is compiled at launch. To add a list, put a `rules-name.json` file in `YTMusicGo/Resources` in the WebKit content rule list format, then run `xcodegen generate`.
 
 ## Limitations
 
 > [!NOTE]
-> Ad blocking and the interface changes depend on YouTube's HTML and can break at any time. If something stops working, update the selectors above.
+> The internal API is not public. If YouTube rejects the client version or changes the JSON, pages come back empty until the code is updated.
 
 - Portrait orientation only, on iPhone.
 - One account at a time.
-- The app menus and some buttons are in Portuguese. YouTube Music follows your account language.
+- The interface is in Portuguese.
+- Translation uses Google's free unofficial endpoint, which can stop working without notice.
+- The logo and icon are YouTube Music's trademarks, for personal use only.
 
 ## Development
 
-Debug builds turn on the Web Inspector. Connect the iPhone, then inspect the `WKWebView` from Safari's Develop menu.
+[`scripts/harness`](scripts/harness) builds the data layer as a command line tool and checks every endpoint against the real API, without signing in:
+
+```bash
+scripts/harness/run.sh
+```
+
+Run it after changing the parser or when pages come back empty.
