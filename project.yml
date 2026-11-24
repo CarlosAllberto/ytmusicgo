@@ -12,8 +12,8 @@ targets:
       path: YTMusicGo/Info.plist
       properties:
         CFBundleDisplayName: YTMusicGo
-        CFBundleShortVersionString: "2.0.0"
-        CFBundleVersion: "2"
+        CFBundleShortVersionString: "2.1.0"
+        CFBundleVersion: "3"
         UIBackgroundModes: [audio]
         UILaunchScreen: {}
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
@@ -39,8 +39,8 @@ targets:
       path: YTMusicGoWidget/Info.plist
       properties:
         CFBundleDisplayName: YTMusicGo
-        CFBundleShortVersionString: "2.0.0"
-        CFBundleVersion: "2"
+        CFBundleShortVersionString: "2.1.0"
+        CFBundleVersion: "3"
         NSExtension:
           NSExtensionPointIdentifier: com.apple.widgetkit-extension
     entitlements:
