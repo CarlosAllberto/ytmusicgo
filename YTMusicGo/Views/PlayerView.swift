@@ -61,6 +61,7 @@ struct PlayerView: View {
                 }
             }.padding(24).frame(maxWidth: 420)
         }
+        .modifier(PullToClose(close: close))
         .task(id: player.current?.videoId) {
             lyrics = nil; translated = nil; showTranslated = false; translateFailed = false
             guard let id = player.current?.videoId else { return }
@@ -153,4 +154,22 @@ struct PlayerView: View {
     }
 
     private func time(_ s: Double) -> String { String(format: "%d:%02d", Int(s) / 60, Int(s) % 60) }
+}
+
+// Depois de rolar a fila e voltar, a rolagem passa a ficar com o arrasto do cabeçalho (só quica no topo),
+// então a própria ScrollView fecha o player ao soltar puxado além do topo.
+private struct PullToClose: ViewModifier {
+    var close: () -> Void
+    @State private var over: CGFloat = 0  // quanto passou do topo
+
+    func body(content: Content) -> some View {
+        if #available(iOS 18, *) {
+            content
+                .onScrollGeometryChange(for: CGFloat.self) { -($0.contentOffset.y + $0.contentInsets.top) } action: { over = $1 }
+                .onScrollPhaseChange { old, _, ctx in
+                    guard old == .interacting, over > 0 else { return }
+                    if over > 70 || (ctx.velocity?.dy ?? 0) < -800 { close() }
+                }
+        } else { content }  // shortcut: no iOS 17 fica só o arrasto do cabeçalho; trocar se o bug aparecer lá
+    }
 }
