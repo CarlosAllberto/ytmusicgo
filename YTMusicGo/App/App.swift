@@ -158,9 +158,12 @@ struct ContentView: View {
                 Text(c.subtitle).font(.system(size: 12)).foregroundStyle(Theme.secondary).lineLimit(1)
             }
             Spacer()
-            Button { player.previous() } label: { Image(systemName: "backward.fill") }.buttonStyle(Pointer())
-            Button { player.toggle() } label: { Image(systemName: player.playing ? "pause.fill" : "play.fill").font(.system(size: 18)) }.buttonStyle(Pointer())
-            Button { player.next() } label: { Image(systemName: "forward.fill") }.buttonStyle(Pointer())
+            // Área de toque de 40pt em cada botão: fica fácil acertar sem tocar no vizinho.
+            HStack(spacing: 8) {
+                Button { player.previous() } label: { Image(systemName: "backward.fill").font(.system(size: 18)).frame(width: 40, height: 40).contentShape(Rectangle()) }.buttonStyle(Pointer())
+                Button { player.toggle() } label: { Image(systemName: player.playing ? "pause.fill" : "play.fill").font(.system(size: 24)).frame(width: 40, height: 40).contentShape(Rectangle()) }.buttonStyle(Pointer())
+                Button { player.next() } label: { Image(systemName: "forward.fill").font(.system(size: 18)).frame(width: 40, height: 40).contentShape(Rectangle()) }.buttonStyle(Pointer())
+            }
         }
         .padding(.horizontal, 16).padding(.vertical, 10)
         .contentShape(Rectangle())
